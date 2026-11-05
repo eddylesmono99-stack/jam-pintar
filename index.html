@@ -1,0 +1,316 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jam Pintar - Belajar Membaca Jam</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;background:#f4f0ff;color:#302653;
+  font-family:"Trebuchet MS",Arial,sans-serif;
+}
+header{
+  background:linear-gradient(135deg,#6954ba,#a18ce1);
+  color:white;text-align:center;padding:24px 15px;
+  border-radius:0 0 28px 28px;
+}
+header h1{margin:0;font-size:30px}
+header p{margin:8px 0 0}
+main{max-width:650px;margin:auto;padding:16px}
+.tabs{display:flex;gap:7px;margin-bottom:15px}
+.tab{
+  flex:1;padding:12px 4px;border:0;border-radius:12px;
+  background:white;color:#6954ba;font-weight:bold;
+  cursor:pointer;font-size:14px;
+}
+.tab.active{background:#6954ba;color:white}
+.card{
+  background:white;border-radius:20px;padding:18px;
+  margin-bottom:15px;box-shadow:0 3px 12px #ddd3f5;
+}
+h2{font-size:21px;margin:0 0 12px;text-align:center}
+.clock{width:100%;max-width:330px;display:block;margin:auto}
+.digital{
+  text-align:center;font-size:44px;font-weight:900;
+  color:#6954ba;margin:8px;
+}
+.words{text-align:center;font-size:18px;font-weight:bold}
+button{font-family:inherit}
+.btn{
+  background:#fff;border:2px solid #d9ccef;color:#514080;
+  border-radius:12px;padding:12px;font-weight:bold;
+  cursor:pointer;font-size:15px;
+}
+.btn:active{transform:scale(.97)}
+.primary{background:#6954ba;color:white;border-color:#6954ba}
+.controls{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid .btn{font-size:18px}
+.feedback{text-align:center;font-weight:bold;min-height:30px;margin:12px 0}
+.hidden{display:none!important}
+.progress{height:12px;background:#e9e0f6;border-radius:10px;overflow:hidden}
+.progress div{height:100%;background:#9a81e1;width:0;transition:.3s}
+footer{text-align:center;padding:15px;font-size:13px;color:#806eaa}
+@media(max-width:400px){
+  header h1{font-size:25px}
+  .digital{font-size:36px}
+  main{padding:10px}
+  .card{padding:13px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div style="font-size:35px">⏰ ⭐ 🎈</div>
+  <h1>JAM PINTAR</h1>
+  <p>Belajar membaca jam jadi seru!</p>
+</header>
+
+<main>
+  <div class="tabs">
+    <button class="tab active" onclick="setMode('belajar',this)">📚 Belajar</button>
+    <button class="tab" onclick="setMode('latihan',this)">🎯 Latihan</button>
+    <button class="tab" onclick="setMode('tantangan',this)">🏆 Tantangan</button>
+  </div>
+
+  <section id="belajar">
+    <div class="card">
+      <h2>Kenalan dengan Jam! 👋</h2>
+      <svg class="clock" id="clock1" viewBox="0 0 320 320">
+        <circle cx="160" cy="160" r="151" fill="#fffaf0" stroke="#d4b9ed" stroke-width="6"/>
+        <g id="ticks1"></g><g id="nums1"></g>
+        <line id="hour1" x1="160" y1="160" x2="160" y2="100" stroke="#f0785b" stroke-width="11" stroke-linecap="round"/>
+        <line id="min1" x1="160" y1="160" x2="160" y2="60" stroke="#3989d5" stroke-width="7" stroke-linecap="round"/>
+        <circle cx="160" cy="160" r="9" fill="#51447e"/>
+      </svg>
+      <div class="digital" id="digital">03:00</div>
+      <div class="words" id="words">Pukul tiga tepat!</div>
+      <div style="text-align:center;margin-top:12px">
+        <button class="btn primary" onclick="speakTime()">🔊 Dengarkan</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🧡 Ayo Gerakkan Jarumnya!</h2>
+      <p style="text-align:center">Jarum pendek = JAM<br>
+      Jarum panjang = MENIT</p>
+      <div class="controls">
+        <button class="btn" onclick="changeHour(-1)">◀ Jam −1</button>
+        <button class="btn" onclick="changeHour(1)">Jam +1 ▶</button>
+        <button class="btn" onclick="changeMinute(-5)">−5 menit</button>
+        <button class="btn" onclick="changeMinute(5)">+5 menit</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🌟 Rahasia Angka Menit</h2>
+      <p style="text-align:center">Setiap angka dikali 5 menit!</p>
+      <div class="grid" style="text-align:center">
+        <div>1️⃣ = 05 menit</div><div>2️⃣ = 10 menit</div>
+        <div>3️⃣ = 15 menit</div><div>4️⃣ = 20 menit</div>
+        <div>5️⃣ = 25 menit</div><div>6️⃣ = 30 menit</div>
+        <div>7️⃣ = 35 menit</div><div>8️⃣ = 40 menit</div>
+        <div>9️⃣ = 45 menit</div><div>🔟 = 50 menit</div>
+        <div>1️⃣1️⃣ = 55 menit</div><div>1️⃣2️⃣ = 00 menit</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="latihan" class="hidden">
+    <div class="card">
+      <h2>🎯 Ayo Berlatih!</h2>
+      <p style="text-align:center">Lihat jam dan pilih jawaban yang benar.</p>
+      <svg class="clock" viewBox="0 0 320 320">
+        <circle cx="160" cy="160" r="151" fill="#fffaf0" stroke="#d4b9ed" stroke-width="6"/>
+        <g id="ticks2"></g><g id="nums2"></g>
+        <line id="hour2" x1="160" y1="160" x2="160" y2="100" stroke="#f0785b" stroke-width="11" stroke-linecap="round"/>
+        <line id="min2" x1="160" y1="160" x2="160" y2="60" stroke="#3989d5" stroke-width="7" stroke-linecap="round"/>
+        <circle cx="160" cy="160" r="9" fill="#51447e"/>
+      </svg>
+      <h2 id="question">Jam menunjukkan pukul berapa?</h2>
+      <div class="grid" id="options"></div>
+      <div class="feedback" id="feedback"></div>
+      <button class="btn primary" style="width:100%" onclick="nextPractice()">Soal Berikutnya ➜</button>
+      <p style="text-align:center;font-weight:bold" id="score">⭐ Skor: 0</p>
+    </div>
+  </section>
+
+  <section id="tantangan" class="hidden">
+    <div class="card">
+      <h2>🏆 Tantangan 10 Bintang!</h2>
+      <p style="text-align:center">Jawab 10 soal. Kamu pasti bisa!</p>
+      <div class="progress"><div id="bar"></div></div>
+      <p id="counter" style="text-align:center">Soal 1 dari 10</p>
+      <svg class="clock" viewBox="0 0 320 320">
+        <circle cx="160" cy="160" r="151" fill="#fffaf0" stroke="#d4b9ed" stroke-width="6"/>
+        <g id="ticks3"></g><g id="nums3"></g>
+        <line id="hour3" x1="160" y1="160" x2="160" y2="100" stroke="#f0785b" stroke-width="11" stroke-linecap="round"/>
+        <line id="min3" x1="160" y1="160" x2="160" y2="60" stroke="#3989d5" stroke-width="7" stroke-linecap="round"/>
+        <circle cx="160" cy="160" r="9" fill="#51447e"/>
+      </svg>
+      <h2 id="cquestion">Jam menunjukkan pukul berapa?</h2>
+      <div class="grid" id="coptions"></div>
+      <div class="feedback" id="cfeedback"></div>
+      <p style="text-align:center;font-weight:bold" id="cscore">⭐ 0 bintang</p>
+      <button class="btn primary" style="width:100%" onclick="nextChallenge()">Lanjut ➜</button>
+      <button class="btn" style="width:100%;margin-top:8px" onclick="restartChallenge()">🔄 Ulangi Tantangan</button>
+    </div>
+  </section>
+</main>
+<footer>🌈 Jam Pintar • Belajar sambil bermain!</footer>
+
+<script>
+let h=3,m=0,practiceScore=0,practiceTotal=0;
+let chScore=0,chNum=0,answered=false,qh=3,qm=0;
+const NS="http://www.w3.org/2000/svg";
+
+function makeFace(n){
+  const ticks=document.getElementById("ticks"+n);
+  const nums=document.getElementById("nums"+n);
+  for(let i=0;i<60;i++){
+    let a=i*Math.PI/30,r=i%5===0?117:124;
+    let l=document.createElementNS(NS,"line");
+    l.setAttribute("x1",160+r*Math.sin(a));
+    l.setAttribute("y1",160-r*Math.cos(a));
+    l.setAttribute("x2",160+132*Math.sin(a));
+    l.setAttribute("y2",160-132*Math.cos(a));
+    l.setAttribute("stroke",i%5===0?"#c5b2dc":"#e7dac9");
+    l.setAttribute("stroke-width",i%5===0?3:1.4);
+    ticks.appendChild(l);
+  }
+  for(let i=1;i<=12;i++){
+    let a=i*Math.PI/6,r=101;
+    let t=document.createElementNS(NS,"text");
+    t.setAttribute("x",160+r*Math.sin(a));
+    t.setAttribute("y",160-r*Math.cos(a)+8);
+    t.setAttribute("text-anchor","middle");
+    t.setAttribute("font-size","24");
+    t.setAttribute("font-weight","900");
+    t.setAttribute("fill","#51447e");
+    t.textContent=i;
+    nums.appendChild(t);
+  }
+}
+[...Array(3)].forEach((_,i)=>makeFace(i+1));
+
+function draw(n,hh,mm){
+  let a=(hh%12+mm/60)*Math.PI/6;
+  let b=mm*Math.PI/30;
+  document.getElementById("hour"+n).setAttribute("x2",160+62*Math.sin(a));
+  document.getElementById("hour"+n).setAttribute("y2",160-62*Math.cos(a));
+  document.getElementById("min"+n).setAttribute("x2",160+99*Math.sin(b));
+  document.getElementById("min"+n).setAttribute("y2",160-99*Math.cos(b));
+}
+
+function readTime(h,m){
+  let hh=h%12||12;
+  if(m===0)return "Pukul "+hh+" tepat!";
+  if(m===30)return "Pukul "+hh+" lewat setengah!";
+  if(m<30)return "Pukul "+hh+" lewat "+m+" menit!";
+  return "Pukul "+((h+1)%12||12)+" kurang "+(60-m)+" menit!";
+}
+
+function update(){
+  draw(1,h,m);
+  document.getElementById("digital").textContent=
+    String(h).padStart(2,"0")+":"+String(m).padStart(2,"0");
+  document.getElementById("words").textContent=readTime(h,m);
+}
+function changeHour(d){h=(h+d+24)%24;update();}
+function changeMinute(d){
+  m+=d;
+  while(m>=60){m-=60;h=(h+1)%24;}
+  while(m<0){m+=60;h=(h+23)%24;}
+  update();
+}
+function speakTime(){
+  if(!window.speechSynthesis){alert(readTime(h,m));return;}
+  speechSynthesis.cancel();
+  let u=new SpeechSynthesisUtterance(readTime(h,m));
+  u.lang="id-ID";u.rate=.85;
+  speechSynthesis.speak(u);
+}
+
+function setMode(mode,btn){
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+  btn.classList.add("active");
+  ["belajar","latihan","tantangan"].forEach(x=>
+    document.getElementById(x).classList.toggle("hidden",x!==mode)
+  );
+  if(mode==="latihan"){
+    practiceScore=0;practiceTotal=0;
+    document.getElementById("score").textContent="⭐ Skor: 0";
+    newQuestion(2);
+  }
+  if(mode==="tantangan"){
+    restartChallenge();
+  }
+}
+
+function newQuestion(n){
+  answered=false;
+  qh=Math.floor(Math.random()*12)+1;
+  qm=Math.floor(Math.random()*12)*5;
+  draw(n,qh%12,qm);
+  let correct=String(qh).padStart(2,"0")+":"+String(qm).padStart(2,"0");
+  let opts=new Set([correct]);
+  while(opts.size<4){
+    let a=Math.floor(Math.random()*12)+1;
+    let b=Math.floor(Math.random()*12)*5;
+    opts.add(String(a).padStart(2,"0")+":"+String(b).padStart(2,"0"));
+  }
+  let id=n===2?"options":"coptions";
+  let el=document.getElementById(id);el.replaceChildren();
+  [...opts].sort(()=>Math.random()-.5).forEach(v=>{
+    let b=document.createElement("button");
+    b.className="btn";b.textContent=v;
+    b.onclick=()=>answer(v,correct,n);
+    el.appendChild(b);
+  });
+  if(n===2)document.getElementById("feedback").textContent="";
+  else document.getElementById("cfeedback").textContent="";
+}
+
+function answer(v,correct,n){
+  if(answered)return;
+  answered=true;
+  let good=v===correct;
+  if(n===2){
+    if(good){practiceScore++;document.getElementById("feedback").textContent="🎉 Hebat! Benar!";}
+    else document.getElementById("feedback").textContent="😊 Jawabannya "+correct;
+    practiceTotal++;
+    document.getElementById("score").textContent=
+      "⭐ Skor: "+practiceScore+" / "+practiceTotal;
+  }else{
+    if(good){chScore++;document.getElementById("cfeedback").textContent="🌟 Benar! Satu bintang!";}
+    else document.getElementById("cfeedback").textContent="💪 Jawabannya "+correct;
+    document.getElementById("cscore").textContent="⭐ "+chScore+" bintang";
+  }
+}
+
+function nextPractice(){newQuestion(2);}
+function nextChallenge(){
+  if(chNum>=10){
+    document.getElementById("cquestion").textContent="🎊 Tantangan selesai!";
+    document.getElementById("cfeedback").textContent="Kamu mendapat "+chScore+" dari 10 bintang!";
+    document.getElementById("coptions").replaceChildren();
+    document.getElementById("bar").style.width="100%";
+    return;
+  }
+  chNum++;
+  document.getElementById("bar").style.width=((chNum-1)*10)+"%";
+  document.getElementById("counter").textContent="Soal "+chNum+" dari 10";
+  newQuestion(3);
+}
+function restartChallenge(){
+  chScore=0;chNum=0;
+  document.getElementById("cscore").textContent="⭐ 0 bintang";
+  nextChallenge();
+}
+update();
+</script>
+</body>
+</html>
